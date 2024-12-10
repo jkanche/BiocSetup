@@ -18,7 +18,7 @@ def test_cli_basic():
     with runner.isolated_filesystem():
         result = runner.invoke(main, ["test-project"])
         assert result.exit_code == 0
-        
+
         # Check if project was created
         assert os.path.exists("test-project")
         assert os.path.exists(os.path.join("test-project", "src"))
@@ -29,7 +29,7 @@ def test_cli_with_options():
     runner = CliRunner()
     with runner.isolated_filesystem():
         result = runner.invoke(
-            main, 
+            main,
             [
                 "test-project",
                 "--description", "Test project description",
@@ -37,15 +37,15 @@ def test_cli_with_options():
             ]
         )
         assert result.exit_code == 0
-        
+
         # Check if project was created
         project_dir = Path("test-project")
         assert project_dir.exists()
-        
+
         # Check if description was added to README
         readme_content = (project_dir / "README.md").read_text()
         assert "Test project description" in readme_content
-        
+
         # Check if license was set correctly
         setup_cfg = (project_dir / "setup.cfg").read_text()
         assert "BSD" in setup_cfg
@@ -57,7 +57,7 @@ def test_cli_invalid_path():
         # Create a file that will conflict with the project path
         with open("existing-file", "w") as f:
             f.write("test")
-            
+
         result = runner.invoke(main, ["existing-file"])
         assert result.exit_code != 0
 
