@@ -23,8 +23,8 @@ jobs:
 
       - name: Setup git creds
         run: |
-          git config --global user.email "gituser@biocpy"
-          git config --global user.name "Biocpy test user"
+          git config user.name jkanche
+          git config user.email jayaram.kancherla@gmail.com
 
       - name: Test with tox
         run: |
@@ -37,7 +37,7 @@ jobs:
       - run: touch ./docs/_build/html/.nojekyll
 
       - name: GH Pages Deployment
-        uses: JamesIves/github-pages-deploy-action@4.1.3
+        uses: JamesIves/github-pages-deploy-action@4
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: ./docs/_build/html
