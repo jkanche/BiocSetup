@@ -73,6 +73,7 @@ def create_repository(
 # -- Biocsetup configuration -------------------------------------------------
 
 # Enable execution of code chunks in markdown
+extensions.remove('myst_parser')
 extensions.append('myst_nb')
 
 # Less verbose api documentation
@@ -86,9 +87,11 @@ autodoc_default_options = {
 
 autosummary_generate = True
 autosummary_imported_members = True
+
+html_theme = "furo"
 """
 
-    conf_content = conf_content.replace("alabaster", "furo")
+    # conf_content = conf_content.replace("alabaster", "furo")
 
     with open(conf_py_path, "w") as f:
         f.write(conf_content + myst_config)

@@ -79,7 +79,7 @@ templates_path = ["_templates"]
 
 
 # Enable markdown
-extensions.append("myst_parser")
+extensions.append("myst_nb")
 
 # Configure MyST-Parser
 myst_enable_extensions = [
@@ -304,9 +304,6 @@ intersphinx_mapping = {
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)
 
 # -- Biocsetup configuration -------------------------------------------------
-
-# Enable execution of code chunks in markdown
-extensions.append('myst_nb')
 
 # Less verbose api documentation
 extensions.append('sphinx_autodoc_typehints')
