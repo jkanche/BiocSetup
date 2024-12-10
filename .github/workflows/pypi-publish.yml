@@ -25,8 +25,8 @@ jobs:
 
       - name: Setup git creds
         run: |
-          git config user.name jkanche
-          git config user.email jayaram.kancherla@gmail.com
+          git config --global user.name jkanche
+          git config --global user.email jayaram.kancherla@gmail.com
 
       - name: Test with tox
         run: |
