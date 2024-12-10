@@ -47,6 +47,7 @@ create_repository(
 ## After setup
 
 - (Optional) Enable [pre-commit.ci](https://pre-commit.ci/) bot for your new repository.
+- (Optional) Install [ruff](https://docs.astral.sh/ruff/) for code formatting.
 
 <!-- pyscaffold-notes -->
 

@@ -86,9 +86,9 @@ autodoc_default_options = {
 
 autosummary_generate = True
 autosummary_imported_members = True
-
-html_theme = "furo"
 """
+
+    conf_content = conf_content.replace("alabaster", "furo")
 
     with open(conf_py_path, "w") as f:
         f.write(conf_content + myst_config)
