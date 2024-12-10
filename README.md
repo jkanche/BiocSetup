@@ -46,7 +46,10 @@ create_repository(
 
 ## After setup
 
-- (Optional) Enable [pre-commit.ci](https://pre-commit.ci/) bot for your new repository.
+- Add a secret variable, `PYPI_API_TOKEN`, to your repository containing the token for publishing the package to PyPI.
+  - Tagging the repository will trigger an action to test, generate documentation, and publish the package to PyPI.
+- Install [tox](https://tox.wiki/en/4.23.2/) to handle package tasks. GitHub Actions relies on the tox configuration to test, generate documentation, and publish packages.
+- (Optional) Enable the [pre-commit.ci](https://pre-commit.ci/) bot for your repository.
 - (Optional) Install [ruff](https://docs.astral.sh/ruff/) for code formatting.
 
 <!-- pyscaffold-notes -->

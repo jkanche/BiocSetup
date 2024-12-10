@@ -1,8 +1,9 @@
 # Changelog
 
-## Version 0.1.1
+## Version 0.1.1 - 0.1.2
 
-Minor changes to improve user experience.
+- Minor changes to improve user experience.
+- Replace `myst_nb` and `myst_parser`.
 
 ## Version 0.1.0
 
