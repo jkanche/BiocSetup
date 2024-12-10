@@ -1,0 +1,29 @@
+biocsetup package
+=================
+
+Submodules
+----------
+
+biocsetup.cli module
+--------------------
+
+.. automodule:: biocsetup.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+biocsetup.create\_repository module
+-----------------------------------
+
+.. automodule:: biocsetup.create_repository
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: biocsetup
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biocsetup.create_repository &#8212; biocsetup 0.0.post1.dev1+gf9bdd86 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=0ca6144b" />
+    <script src="../../_static/documentation_options.js?v=bb5825ff"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biocsetup.create_repository</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pyscaffold</span> <span class="kn">import</span> <span class="n">api</span>
+<span class="kn">from</span> <span class="nn">pyscaffoldext.markdown.extension</span> <span class="kn">import</span> <span class="n">Markdown</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Jayaram Kancherla&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Jayaram Kancherla&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MIT&quot;</span>
+
+
+<div class="viewcode-block" id="create_repository">
+<a class="viewcode-back" href="../../api/biocsetup.html#biocsetup.create_repository.create_repository">[docs]</a>
+<span class="k">def</span> <span class="nf">create_repository</span><span class="p">(</span>
+    <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MIT&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new BiocPy Python package repository.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project_path:</span>
+<span class="sd">            Path where the new project should be created</span>
+
+<span class="sd">        description:</span>
+<span class="sd">            Optional project description</span>
+
+<span class="sd">        license:</span>
+<span class="sd">            License to use (default: MIT)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create project using pyscaffold with markdown extension</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;project_path&quot;</span><span class="p">:</span> <span class="n">project_path</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span> <span class="ow">or</span> <span class="s2">&quot;Add a short description here!&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">license</span><span class="p">,</span>
+        <span class="s2">&quot;extensions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">Markdown</span><span class="p">()],</span>
+    <span class="p">}</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+
+    <span class="c1"># Get absolute path to templates directory</span>
+    <span class="n">template_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;templates&quot;</span>
+
+    <span class="c1"># Add GitHub Actions</span>
+    <span class="n">gh_actions_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;.github&quot;</span> <span class="o">/</span> <span class="s2">&quot;workflows&quot;</span>
+    <span class="n">gh_actions_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">workflow</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pypi-test.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;pypi-publish.yml&quot;</span><span class="p">]:</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">template_dir</span> <span class="o">/</span> <span class="s2">&quot;github_workflows&quot;</span> <span class="o">/</span> <span class="n">workflow</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">gh_actions_dir</span> <span class="o">/</span> <span class="n">workflow</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+
+    <span class="c1"># Add pre-commit config</span>
+    <span class="n">precommit_src</span> <span class="o">=</span> <span class="n">template_dir</span> <span class="o">/</span> <span class="s2">&quot;precommit&quot;</span> <span class="o">/</span> <span class="s2">&quot;pre-commit-config.yaml&quot;</span>
+    <span class="n">precommit_dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;.pre-commit-config.yaml&quot;</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">precommit_src</span><span class="p">,</span> <span class="n">precommit_dst</span><span class="p">)</span>
+
+    <span class="c1"># Modify sphinx conf.py</span>
+    <span class="n">conf_py_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;docs&quot;</span> <span class="o">/</span> <span class="s2">&quot;conf.py&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_py_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">conf_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Add myst-nb extension and configuration</span>
+    <span class="n">myst_config</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># -- Biocsetup configuration -------------------------------------------------</span>
+
+<span class="s2"># Enable execution of code chunks in markdown</span>
+<span class="s2">extensions.append(&#39;myst_nb&#39;)</span>
+
+<span class="s2"># Less verbose api documentation</span>
+<span class="s2">extensions.append(&#39;sphinx_autodoc_typehints&#39;)</span>
+
+<span class="s2">autodoc_default_options = {</span>
+<span class="s2">    &quot;special-members&quot;: True,</span>
+<span class="s2">    &quot;undoc-members&quot;: True,</span>
+<span class="s2">    &quot;exclude-members&quot;: &quot;__weakref__, __dict__, __str__, __module__&quot;,</span>
+<span class="s2">}</span>
+
+<span class="s2">autosummary_generate = True</span>
+<span class="s2">autosummary_imported_members = True</span>
+
+<span class="s2">html_theme = &quot;furo&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">conf_py_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">conf_content</span> <span class="o">+</span> <span class="n">myst_config</span><span class="p">)</span>
+
+    <span class="c1"># Update requirements.txt for docs</span>
+    <span class="n">docs_requirements</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;docs&quot;</span> <span class="o">/</span> <span class="s2">&quot;requirements.txt&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">docs_requirements</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">myst-nb</span><span class="se">\n</span><span class="s2">furo</span><span class="se">\n</span><span class="s2">sphinx-autodoc-typehints</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Modify README</span>
+    <span class="n">readme_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;README.md&quot;</span>
+    <span class="n">proj_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">new_readme</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">[![PyPI-Server](https://img.shields.io/pypi/v/</span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span><span class="s2">.svg)](https://pypi.org/project/</span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span><span class="s2">/)</span>
+<span class="s2">![Unit tests](https://github.com/BiocPy/</span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span><span class="s2">/actions/workflows/pypi-test.yml/badge.svg)</span>
+
+<span class="s2"># </span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span>
+
+<span class="s2">&gt; </span><span class="si">{</span><span class="n">description</span><span class="si">}</span>
+
+<span class="s2">A longer description of your project goes here...</span>
+
+<span class="s2">## Install</span>
+
+<span class="s2">To get started, install the package from [PyPI](https://pypi.org/project/</span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span><span class="s2">/)</span>
+
+<span class="s2">```bash</span>
+<span class="s2">pip install </span><span class="si">{</span><span class="n">proj_name</span><span class="si">}</span>
+<span class="s2">```</span>
+
+<span class="s2">&lt;!-- biocsetup-notes --&gt;</span>
+
+<span class="s2">## Note</span>
+
+<span class="s2">This project has been set up using [BiocSetup](https://github.com/biocpy/biocsetup)</span>
+<span class="s2">and [PyScaffold](https://pyscaffold.org/).</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">readme_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_readme</span><span class="p">)</span>
+
+    <span class="c1"># Modify ppyproject.toml to add ruff configuration</span>
+    <span class="n">pyprj_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;pyproject.toml&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyprj_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pyprj_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">ruff_config</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">[tool.ruff]</span>
+<span class="s2">line-length = 120</span>
+<span class="s2">src = [&quot;src&quot;]</span>
+<span class="s2">exclude = [&quot;tests&quot;]</span>
+<span class="s2">extend-ignore = [&quot;F821&quot;]</span>
+
+<span class="s2">[tool.ruff.pydocstyle]</span>
+<span class="s2">convention = &quot;google&quot;</span>
+
+<span class="s2">[tool.ruff.format]</span>
+<span class="s2">docstring-code-format = true</span>
+<span class="s2">docstring-code-line-length = 20</span>
+
+<span class="s2">[tool.ruff.per-file-ignores]</span>
+<span class="s2">&quot;__init__.py&quot; = [&quot;E402&quot;, &quot;F401&quot;]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyprj_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pyprj_content</span> <span class="o">+</span> <span class="n">ruff_config</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">biocsetup</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Jayaram Kancherla.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
