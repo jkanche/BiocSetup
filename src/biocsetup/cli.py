@@ -9,10 +9,10 @@ __license__ = "MIT"
 
 @click.command()
 @click.argument("project_path")
-@click.option("--description", "-d", help="Project description")
+@click.option("--description", "-d", help="Project description", default="Add a short description here!")
 @click.option("--license", "-l", default="MIT", help="License (default: MIT)")
 def main(project_path: str, description: str, license: str):
-    """Create a new Python package repository with consistent configuration."""
+    """Create a new BiocPy Python package."""
     create_repository(
         project_path=project_path,
         description=description,

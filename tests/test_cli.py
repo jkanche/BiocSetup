@@ -66,6 +66,6 @@ def test_cli_help():
     runner = CliRunner()
     result = runner.invoke(main, ["--help"])
     assert result.exit_code == 0
-    assert "Create a new Python package repository" in result.output
+    assert "Create a new BiocPy Python package" in result.output
     assert "--description" in result.output
     assert "--license" in result.output

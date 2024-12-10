@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from typing import Optional
 
-from pyscaffold import api
+from pyscaffold import api, file_system, shell
 from pyscaffoldext.markdown.extension import Markdown
 
 __author__ = "Jayaram Kancherla"
@@ -12,7 +12,7 @@ __license__ = "MIT"
 
 def create_repository(
     project_path: str,
-    description: Optional[str] = None,
+    description: Optional[str] = "Add a short description here!",
     license: str = "MIT",
 ) -> None:
     """
@@ -20,22 +20,28 @@ def create_repository(
 
     Args:
         project_path:
-            Path where the new project should be created
+            Path where the new project should be created.
 
         description:
-            Optional project description
+            Optional project description.
 
         license:
-            License to use (default: MIT)
+            License to use.
+            Defaults to 'MIT'.
     """
     # Create project using pyscaffold with markdown extension
+    if description is None:
+        description = "Add a short description here!"
+
     opts = {
         "project_path": project_path,
-        "description": description or "Add a short description here!",
+        "description": description,
         "license": license,
         "extensions": [Markdown()],
     }
     api.create_project(**opts)
+
+    modified_files = []
 
     # Get absolute path to templates directory
     template_dir = Path(__file__).parent / "templates"
@@ -48,11 +54,13 @@ def create_repository(
         src = template_dir / "github_workflows" / workflow
         dst = gh_actions_dir / workflow
         shutil.copy2(src, dst)
+        modified_files.append(dst)
 
     # Add pre-commit config
     precommit_src = template_dir / "precommit" / "pre-commit-config.yaml"
     precommit_dst = Path(project_path) / ".pre-commit-config.yaml"
     shutil.copy2(precommit_src, precommit_dst)
+    modified_files.append(precommit_dst)
 
     # Modify sphinx conf.py
     conf_py_path = Path(project_path) / "docs" / "conf.py"
@@ -61,6 +69,7 @@ def create_repository(
 
     # Add myst-nb extension and configuration
     myst_config = """
+
 # -- Biocsetup configuration -------------------------------------------------
 
 # Enable execution of code chunks in markdown
@@ -77,24 +86,25 @@ autodoc_default_options = {
 
 autosummary_generate = True
 autosummary_imported_members = True
-
-html_theme = "furo"
 """
+
+    conf_content = conf_content.replace("alabaster", "furo")
 
     with open(conf_py_path, "w") as f:
         f.write(conf_content + myst_config)
+        modified_files.append(conf_py_path)
 
     # Update requirements.txt for docs
     docs_requirements = Path(project_path) / "docs" / "requirements.txt"
     with open(docs_requirements, "a") as f:
-        f.write("\nmyst-nb\nfuro\nsphinx-autodoc-typehints\n")
+        f.write("myst-nb\nfuro\nsphinx-autodoc-typehints\n")
+        modified_files.append(docs_requirements)
 
     # Modify README
     readme_path = Path(project_path) / "README.md"
     proj_name = Path(project_path).parts[-1]
 
-    new_readme = f"""
-[![PyPI-Server](https://img.shields.io/pypi/v/{proj_name}.svg)](https://pypi.org/project/{proj_name}/)
+    new_readme = f"""[![PyPI-Server](https://img.shields.io/pypi/v/{proj_name}.svg)](https://pypi.org/project/{proj_name}/)
 ![Unit tests](https://github.com/BiocPy/{proj_name}/actions/workflows/pypi-test.yml/badge.svg)
 
 # {proj_name}
@@ -121,6 +131,7 @@ and [PyScaffold](https://pyscaffold.org/).
 
     with open(readme_path, "w") as f:
         f.write(new_readme)
+        modified_files.append(readme_path)
 
     # Modify ppyproject.toml to add ruff configuration
     pyprj_path = Path(project_path) / "pyproject.toml"
@@ -147,3 +158,12 @@ docstring-code-line-length = 20
 
     with open(pyprj_path, "w") as f:
         f.write(pyprj_content + ruff_config)
+        modified_files.append(pyprj_path)
+
+    with file_system.chdir(project_path):
+        for f in modified_files:
+            shell.git("add", str(f.relative_to(project_path)))
+
+        shell.git("commit", "-m", "BiocSetup configuration")
+
+    print("BiocSetup complete! 🚀 💥")

@@ -171,7 +171,7 @@ todo_emit_warnings = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "alabaster"
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -302,3 +302,20 @@ intersphinx_mapping = {
 }
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)
+
+# -- Biocsetup configuration -------------------------------------------------
+
+# Enable execution of code chunks in markdown
+extensions.append('myst_nb')
+
+# Less verbose api documentation
+extensions.append('sphinx_autodoc_typehints')
+
+autodoc_default_options = {
+    "special-members": True,
+    "undoc-members": True,
+    "exclude-members": "__weakref__, __dict__, __str__, __module__",
+}
+
+autosummary_generate = True
+autosummary_imported_members = True

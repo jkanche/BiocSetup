@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.1
+
+Minor changes to improve user experience.
+
 ## Version 0.1.0
 
 - Uses PyScaffold with Markdown extension for base project structure
@@ -10,4 +14,4 @@
   - Furo theme
   - Type hints documentation
 - Adds Ruff configuration for consistent code formatting
-- Creates standardized README with PyPI and CI badges
+- Creates README
