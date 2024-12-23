@@ -33,10 +33,10 @@ def test_create_repository(temp_dir):
 
     # Check if GitHub Actions are added
     assert os.path.exists(
-        os.path.join(project_path, ".github", "workflows", "pypi-test.yml")
+        os.path.join(project_path, ".github", "workflows", "run-tests.yml")
     )
     assert os.path.exists(
-        os.path.join(project_path, ".github", "workflows", "pypi-publish.yml")
+        os.path.join(project_path, ".github", "workflows", "publish-pypi.yml")
     )
 
     # Check if pre-commit config is added

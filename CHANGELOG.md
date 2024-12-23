@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.2.0
+
+- Rename github actions to `run-tests` & `publish-pypi`.
+
 ## Version 0.1.1 - 0.1.2
 
 - Minor changes to improve user experience.

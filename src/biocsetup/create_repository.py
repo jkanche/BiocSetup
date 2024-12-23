@@ -50,7 +50,7 @@ def create_repository(
     gh_actions_dir = Path(project_path) / ".github" / "workflows"
     gh_actions_dir.mkdir(parents=True, exist_ok=True)
 
-    for workflow in ["pypi-test.yml", "pypi-publish.yml"]:
+    for workflow in ["run-tests.yml", "publish-pypi.yml"]:
         src = template_dir / "github_workflows" / workflow
         dst = gh_actions_dir / workflow
         shutil.copy2(src, dst)
