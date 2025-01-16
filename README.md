@@ -1,5 +1,5 @@
 [![PyPI-Server](https://img.shields.io/pypi/v/biocsetup.svg)](https://pypi.org/project/biocsetup/)
-![Unit tests](https://github.com/BiocPy/BiocSetup/actions/workflows/pypi-test.yml/badge.svg)
+![Unit tests](https://github.com/BiocPy/BiocSetup/actions/workflows/run-tests.yml/badge.svg)
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
 
 # BiocSetup
